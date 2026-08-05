@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Tanisha, From Sanyam</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-desk: #1a0f0a;
+            --paper-color: #fdfbf7;
+            --envelope-color: #f3ebd9;
+            --envelope-flap: #e8dcbf;
+            --envelope-shadow: #d3c4a1;
+            --text-color: #2c221e;
+            --accent-color: #8b263e;
+            --accent-gold: #d4af37;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at center, #3a2318 0%, #120a06 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            perspective: 1000px;
+        }
+
+        /* Ambient Dust Particles */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Container & Card Framing */
+        .scene {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card-container {
+            width: 100%;
+            max-width: 540px;
+            min-height: 620px;
+            background: var(--paper-color);
+            border-radius: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 
+                        inset 0 0 80px rgba(139, 69, 19, 0.08);
+            border: 1px solid #e8dfd1;
+            position: relative;
+            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transform-style: preserve-3d;
+        }
+
+        .card-container.opened {
+            animation: breathe 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.015); }
+        }
+
+        /* Envelope Cover Overlay */
+        .cover-overlay {
+            position: absolute;
+            inset: 0;
+            background: var(--envelope-color);
+            border-radius: 12px;
+            z-index: 15;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            padding: 50px 20px 30px 20px;
+            text-align: center;
+            transition: opacity 0.8s ease, visibility 0.8s, transform 0.8s ease;
+            overflow: hidden;
+            border: 1px solid #dcd1ba;
+            box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
+        }
+
+        /* Envelope Triangular Flaps & Seams */
+        .envelope-flap-top {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            border-left: 270px solid transparent;
+            border-right: 270px solid transparent;
+            border-top: 240px solid var(--envelope-flap);
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+            z-index: 1;
+        }
+
+        .envelope-flap-left {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            border-top: 310px solid transparent;
+            border-bottom: 310px solid transparent;
+            border-left: 270px solid var(--envelope-shadow);
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .envelope-flap-right {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 100%;
+            border-top: 310px solid transparent;
+            border-bottom: 310px solid transparent;
+            border-right: 270px solid var(--envelope-shadow);
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        .envelope-header {
+            position: relative;
+            z-index: 2;
+            margin-top: 10px;
+        }
+
+        .cover-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            letter-spacing: 3px;
+            color: var(--accent-color);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+
+        .cover-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 0.95rem;
+            color: #66554b;
+        }
+
+        .opening-hint {
+            position: relative;
+            z-index: 2;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            color: #7a665a;
+            text-transform: lowercase;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Wax Seal Centered on Top Flap Tip */
+        .wax-seal {
+            position: absolute;
+            top: 240px;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: 85px;
+            height: 85px;
+            background: radial-gradient(circle at 30% 30%, #c42b47, #7a1428);
+            border-radius: 50%;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 20;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px ridge rgba(255, 215, 0, 0.3);
+        }
+
+        .wax-seal:hover {
+            transform: translate(-50%, -50%) scale(1.08);
+        }
+
+        .wax-seal-inner {
+            width: 65px;
+            height: 65px;
+            border: 2px dashed rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .seal-initials {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fceabb;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
+            letter-spacing: 2px;
+        }
+
+        /* Card Inner Content */
+        .letter-content {
+            padding: 50px 40px;
+            opacity: 0;
+            transition: opacity 1s ease 0.4s;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .date {
+            text-align: right;
+            font-size: 0.95rem;
+            color: #6b5b52;
+            font-weight: 500;
+        }
+
+        .salutation {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: var(--accent-color);
+            font-weight: 700;
+        }
+
+        .body-paragraphs {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            line-height: 1.6;
+            color: var(--text-color);
+            font-size: 0.95rem;
+        }
+
+        .body-paragraphs p {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        /* Special Promise Box */
+        .promise-box {
+            background: rgba(139, 38, 62, 0.04);
+            border-left: 3px solid var(--accent-color);
+            border-right: 3px solid var(--accent-color);
+            padding: 16px;
+            border-radius: 6px;
+            text-align: center;
+            margin: 8px 0;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+
+        .promise-box p {
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #4a1523;
+            font-size: 0.95rem;
+        }
+
+        .promise-box p:last-child {
+            margin-bottom: 0;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            color: var(--accent-color);
+        }
+
+        .signature {
+            margin-top: 10px;
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.8rem;
+            color: var(--accent-color);
+            line-height: 1.2;
+        }
+
+        .signature span {
+            display: block;
+            font-size: 1.1rem;
+            font-family: 'Playfair Display', serif;
+            color: #6b5b52;
+        }
+
+        /* Opened State Utility Classes */
+        .opened .cover-overlay {
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.95);
+        }
+
+        .opened .wax-seal {
+            opacity: 0;
+            pointer-events: none;
+            transform: translate(-50%, -50%) scale(2);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .opened .letter-content {
+            opacity: 1;
+        }
+
+        /* Floating Emoji Particles */
+        .emoji-particle {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999;
+            animation: floatUp 2.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(0.5) rotate(0deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(calc(-50% + var(--vx)), calc(-50% + var(--vy))) scale(1.4) rotate(var(--rot));
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="particles-canvas"></canvas>
+
+    <div class="scene">
+        <div class="card-container" id="card">
+
+            <!-- Clickable Wax Seal -->
+            <div class="wax-seal" id="waxSeal">
+                <div class="wax-seal-inner">
+                    <span class="seal-initials">TS</span>
+                </div>
+            </div>
+
+            <!-- Envelope Cover Overlay -->
+            <div class="cover-overlay">
+                <!-- Envelope Geometry -->
+                <div class="envelope-flap-top"></div>
+                <div class="envelope-flap-left"></div>
+                <div class="envelope-flap-right"></div>
+
+                <div class="envelope-header">
+                    <h1 class="cover-title">FOR TANISHA FROM SANYAM</h1>
+                    <p class="cover-subtitle">A letter that was always meant for you.</p>
+                </div>
+
+                <div class="opening-hint">✦ tap the seal to open ✦</div>
+            </div>
+
+            <!-- Internal Written Message -->
+            <div class="letter-content">
+                <div class="date">🌹 5 August 2026 🌹</div>
+                
+                <div class="salutation">My Dearest Tanisha,</div>
+
+                <div class="body-paragraphs">
+                    <p><span>💖</span> <span>If ever life feels heavy, I promise to be your calm.</span></p>
+                    <p><span>☀️</span> <span>If ever the world feels cold, I promise to be your warmth.</span></p>
+                    <p><span>🌟</span> <span>If ever you doubt your worth, I promise to remind you of every reason why you are everything to me.</span></p>
+                </div>
+
+                <div class="promise-box">
+                    <p>📅 From <strong>8 August</strong> until <strong>22 August</strong>, I promise not to smoke a single cigarette or drink any alcohol.</p>
+                    <p>✨ No excuses. No exceptions. ✨</p>
+                </div>
+
+                <div class="body-paragraphs">
+                    <p><span>💫</span> <span>I may not have all the answers, but I promise to always choose you, today, tomorrow, and in every lifetime after.</span></p>
+                    <p><span>🌈</span> <span>I promise to stand by you, to grow with you, and to love you, in the little moments and the big ones too.</span></p>
+                </div>
+
+                <div class="signature">
+                    <span>Forever yours,</span>
+                    Sanyam 💕
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // Ambient Dust Particle Canvas Effect
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 0.4 - 0.2;
+                this.speedY = Math.random() * -0.5 - 0.1;
+                this.opacity = Math.random() * 0.5 + 0.2;
+            }
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.y < 0) this.y = canvas.height;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.x > canvas.width) this.x = 0;
+            }
+            draw() {
+                ctx.fillStyle = `rgba(242, 211, 153, ${this.opacity})`;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < 60; i++) {
+            particles.push(new Particle());
+        }
+
+        function animateParticles() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(p => {
+                p.update();
+                p.draw();
+            });
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        // 3D Tilt Effect on Mouse Move
+        const card = document.getElementById('card');
+        document.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 45;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 45;
+            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+        });
+
+        // Interactive Seal Click & Heart Burst
+        const waxSeal = document.getElementById('waxSeal');
+        const emojis = ['❤️', '💕', '💖', '✨', '🌹', '💗', '❤️‍🔥'];
+
+        waxSeal.addEventListener('click', (e) => {
+            card.classList.add('opened');
+
+            // Trigger Heart Burst Effect
+            const rect = waxSeal.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            for (let i = 0; i < 35; i++) {
+                createParticle(centerX, centerY);
+            }
+        });
+
+        function createParticle(x, y) {
+            const el = document.createElement('div');
+            el.className = 'emoji-particle';
+            el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const vx = (Math.random() - 0.5) * 400 + 'px';
+            const vy = (Math.random() - 0.7) * 400 + 'px';
+            const rot = (Math.random() - 0.5) * 360 + 'deg';
+
+            el.style.setProperty('--vx', vx);
+            el.style.setProperty('--vy', vy);
+            el.style.setProperty('--rot', rot);
+            el.style.left = `${x}px`;
+            el.style.top = `${y}px`;
+            el.style.fontSize = `${Math.random() * 20 + 18}px`;
+
+            document.body.appendChild(el);
+
+            setTimeout(() => {
+                el.remove();
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
