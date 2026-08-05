@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>For Tanisha, From Sanyam</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-desk: #1a0f0a;
             --paper-color: #fdfbf7;
-            --envelope-color: #f3ebd9;
-            --envelope-flap: #e8dcbf;
-            --envelope-shadow: #d3c4a1;
+            --envelope-color: #e5d3b3;
+            --envelope-shadow: rgba(45, 25, 12, 0.4);
             --text-color: #2c221e;
             --accent-color: #8b263e;
-            --accent-gold: #d4af37;
+            --gold-accent: #c5a059;
         }
 
         * {
@@ -31,7 +30,7 @@
             align-items: center;
             font-family: 'Poppins', sans-serif;
             overflow-x: hidden;
-            perspective: 1000px;
+            perspective: 1200px;
         }
 
         /* Ambient Dust Particles */
@@ -61,11 +60,11 @@
             min-height: 620px;
             background: var(--paper-color);
             border-radius: 12px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7), 
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), 
                         inset 0 0 80px rgba(139, 69, 19, 0.08);
             border: 1px solid #e8dfd1;
             position: relative;
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
+            transition: transform 0.15s ease-out, box-shadow 0.3s ease;
             transform-style: preserve-3d;
         }
 
@@ -78,27 +77,27 @@
             100% { transform: scale(1.015); }
         }
 
-        /* Envelope Cover Overlay */
+        /* --- REALISTIC ENVELOPE OVERLAY --- */
         .cover-overlay {
             position: absolute;
             inset: 0;
-            background: var(--envelope-color);
+            background: linear-gradient(135deg, #eee3ce 0%, #d8c4a4 100%);
             border-radius: 12px;
             z-index: 15;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            padding: 50px 20px 30px 20px;
+            padding: 40px 25px 35px 25px;
             text-align: center;
             transition: opacity 0.8s ease, visibility 0.8s, transform 0.8s ease;
             overflow: hidden;
-            border: 1px solid #dcd1ba;
-            box-shadow: inset 0 0 40px rgba(0,0,0,0.05);
+            border: 1px solid #c8b595;
+            box-shadow: inset 0 0 50px rgba(60, 40, 20, 0.15);
         }
 
-        /* Envelope Triangular Flaps & Seams */
-        .envelope-flap-top {
+        /* Envelope Fold Geometry & Drop Shadows */
+        .envelope-fold-top {
             position: absolute;
             top: 0;
             left: 0;
@@ -106,12 +105,38 @@
             height: 0;
             border-left: 270px solid transparent;
             border-right: 270px solid transparent;
-            border-top: 240px solid var(--envelope-flap);
-            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.12));
+            border-top: 250px solid #dfceaf;
+            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.25));
+            z-index: 3;
+        }
+
+        /* Gold Foil Border Overlay on Top Flap */
+        .envelope-fold-top::after {
+            content: '';
+            position: absolute;
+            top: -250px;
+            left: -270px;
+            width: 0;
+            height: 0;
+            border-left: 270px solid transparent;
+            border-right: 270px solid transparent;
+            border-top: 250px solid transparent;
+        }
+
+        .envelope-fold-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 0;
+            border-left: 270px solid transparent;
+            border-right: 270px solid transparent;
+            border-bottom: 230px solid #d3c0a0;
+            filter: drop-shadow(0 -4px 8px rgba(0, 0, 0, 0.15));
             z-index: 1;
         }
 
-        .envelope-flap-left {
+        .envelope-fold-left {
             position: absolute;
             top: 0;
             left: 0;
@@ -119,12 +144,12 @@
             height: 100%;
             border-top: 310px solid transparent;
             border-bottom: 310px solid transparent;
-            border-left: 270px solid var(--envelope-shadow);
-            opacity: 0.35;
-            z-index: 0;
+            border-left: 250px solid #cbb898;
+            opacity: 0.9;
+            z-index: 2;
         }
 
-        .envelope-flap-right {
+        .envelope-fold-right {
             position: absolute;
             top: 0;
             right: 0;
@@ -132,23 +157,33 @@
             height: 100%;
             border-top: 310px solid transparent;
             border-bottom: 310px solid transparent;
-            border-right: 270px solid var(--envelope-shadow);
-            opacity: 0.35;
-            z-index: 0;
+            border-right: 250px solid #c2b090;
+            opacity: 0.9;
+            z-index: 2;
         }
 
+        /* Envelope Title Header (Gold Foil Style) */
         .envelope-header {
             position: relative;
-            z-index: 2;
-            margin-top: 10px;
+            z-index: 10;
+            margin-top: 15px;
+            background: rgba(253, 251, 247, 0.85);
+            padding: 16px 24px;
+            border-radius: 8px;
+            border: 1px solid var(--gold-accent);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15), inset 0 0 10px rgba(197, 160, 89, 0.1);
+            backdrop-filter: blur(3px);
         }
 
         .cover-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.6rem;
-            letter-spacing: 3px;
-            color: var(--accent-color);
-            margin-bottom: 6px;
+            font-family: 'Cinzel', serif;
+            font-size: 1.45rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #701d31 0%, #b83253 50%, #701d31 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 4px;
             text-transform: uppercase;
         }
 
@@ -156,68 +191,94 @@
             font-family: 'Playfair Display', serif;
             font-style: italic;
             font-size: 0.95rem;
-            color: #66554b;
+            color: #5c4a3e;
+            letter-spacing: 0.5px;
         }
 
         .opening-hint {
             position: relative;
-            z-index: 2;
-            font-size: 0.85rem;
-            letter-spacing: 2px;
-            color: #7a665a;
-            text-transform: lowercase;
+            z-index: 10;
+            font-size: 0.8rem;
+            letter-spacing: 3px;
+            color: #5c4a3e;
+            text-transform: uppercase;
+            font-weight: 500;
+            background: rgba(253, 251, 247, 0.7);
+            padding: 6px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
+            0%, 100% { opacity: 0.6; transform: scale(0.98); }
+            50% { opacity: 1; transform: scale(1.02); }
         }
 
-        /* Wax Seal Centered on Top Flap Tip */
+        /* --- ULTRA-REALISTIC WAX SEAL --- */
         .wax-seal {
             position: absolute;
-            top: 240px;
+            top: 250px;
             left: 50%;
             transform: translate(-50%, -50%) scale(1);
-            width: 85px;
-            height: 85px;
-            background: radial-gradient(circle at 30% 30%, #c42b47, #7a1428);
+            width: 92px;
+            height: 92px;
+            background: radial-gradient(circle at 35% 35%, #d63353 0%, #8b1930 55%, #4a0a18 100%);
             border-radius: 50%;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.4), inset 0 0 10px rgba(0,0,0,0.4);
+            /* Realistic Organic Wax Edge Contour */
+            box-shadow: 
+                0 10px 25px rgba(0, 0, 0, 0.5),
+                inset 0 3px 6px rgba(255, 255, 255, 0.35),
+                inset 0 -6px 12px rgba(0, 0, 0, 0.6);
             display: flex;
             justify-content: center;
             align-items: center;
             cursor: pointer;
             z-index: 20;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 3px ridge rgba(255, 215, 0, 0.3);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 215, 0, 0.4);
+        }
+
+        .wax-seal::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 53% 47% 52% 48% / 47% 53% 47% 53%;
+            background: inherit;
+            z-index: -1;
+            filter: blur(1px);
         }
 
         .wax-seal:hover {
             transform: translate(-50%, -50%) scale(1.08);
+            box-shadow: 
+                0 14px 30px rgba(0, 0, 0, 0.6),
+                inset 0 3px 6px rgba(255, 255, 255, 0.4),
+                inset 0 -6px 12px rgba(0, 0, 0, 0.6);
         }
 
         .wax-seal-inner {
-            width: 65px;
-            height: 65px;
-            border: 2px dashed rgba(255, 255, 255, 0.4);
+            width: 70px;
+            height: 70px;
+            border: 2px dashed rgba(245, 222, 179, 0.5);
             border-radius: 50%;
             display: flex;
             justify-content: center;
             align-items: center;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.4);
+            background: radial-gradient(circle at 40% 40%, rgba(163, 28, 54, 0.2), transparent);
         }
 
         .seal-initials {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.55rem;
             font-weight: 700;
-            color: #fceabb;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-            letter-spacing: 2px;
+            color: #f7e7c4;
+            text-shadow: 1px 2px 3px rgba(0, 0, 0, 0.8), 0 0 2px rgba(255, 215, 0, 0.5);
+            letter-spacing: 3px;
         }
 
-        /* Card Inner Content */
+        /* --- CARD INNER CONTENT --- */
         .letter-content {
             padding: 50px 40px;
             opacity: 0;
@@ -257,7 +318,7 @@
             gap: 10px;
         }
 
-        /* Special Promise Box */
+        /* Promise Box */
         .promise-box {
             background: rgba(139, 38, 62, 0.04);
             border-left: 3px solid var(--accent-color);
@@ -303,7 +364,7 @@
         .opened .cover-overlay {
             opacity: 0;
             visibility: hidden;
-            transform: scale(0.95);
+            transform: translateY(20px) scale(0.95);
         }
 
         .opened .wax-seal {
@@ -353,10 +414,11 @@
 
             <!-- Envelope Cover Overlay -->
             <div class="cover-overlay">
-                <!-- Envelope Geometry -->
-                <div class="envelope-flap-top"></div>
-                <div class="envelope-flap-left"></div>
-                <div class="envelope-flap-right"></div>
+                <!-- Realistic Envelope Folds -->
+                <div class="envelope-fold-top"></div>
+                <div class="envelope-fold-left"></div>
+                <div class="envelope-fold-right"></div>
+                <div class="envelope-fold-bottom"></div>
 
                 <div class="envelope-header">
                     <h1 class="cover-title">FOR TANISHA FROM SANYAM</h1>
